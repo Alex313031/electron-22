@@ -68,7 +68,8 @@ rtc_use_h264 = true
 is_component_ffmpeg = true
 
 # Added by Alex313031
-target_os = "linux"
+visual_studio_version = "2022"
+target_os = "win"
 target_cpu = "x64"
 is_debug = false
 enable_stripping = true
