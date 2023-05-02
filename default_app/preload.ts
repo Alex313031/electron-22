@@ -45,7 +45,7 @@ async function initialize () {
   replaceText('.electron-version', `Electron v${process.versions.electron}`);
   replaceText('.chrome-version', `Chromium v${process.versions.chrome}`);
   replaceText('.node-version', `Node v${process.versions.node}`);
-  replaceText('.v8-version', `v8 v${process.versions.v8}`);
+  replaceText('.v8-version', `V8 v${process.versions.v8}`);
   replaceText('.command-example', `${electronPath} path-to-app`);
 
   for (const element of document.querySelectorAll<HTMLSpanElement>('.octicon')) {
