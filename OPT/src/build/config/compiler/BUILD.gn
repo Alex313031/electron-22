@@ -548,6 +548,13 @@ config("compiler") {
         ldflags += [ "-Wl,-mllvm,-instcombine-lower-dbg-declare=0" ]
       }
     }
+
+    # TODO(crbug.com/1235145): Investigate why/if this should be needed.
+    if (is_win) {
+      cflags += [ "/clang:-ffp-contract=off" ]
+    } else {
+      cflags += [ "-ffp-contract=off" ]
+    }
   }
 
   # Rust compiler setup (for either clang or rustc).
@@ -657,7 +664,7 @@ config("compiler") {
         "/opt:lldltojobs=all",
         "-mllvm:-import-instr-limit=$import_instr_limit",
         "-mllvm:-import-hot-multiplier=15",
-        "-mllvm:-import-cold-multiplier=4",
+        "-mllvm:-import-cold-multiplier=2",
         # "/lldltocache:" +
         #    rebase_path("$root_out_dir/thinlto-cache", root_build_dir),
         # "/lldltocachepolicy:$cache_policy",
@@ -868,6 +875,7 @@ config("thinlto_optimize_default") {
       ldflags += [ "-mllvm:-enable-pre=false", ]
     } else {
       ldflags = [ "-Wl,--lto-O" + lto_opt_level ]
+      ldflags += [ "-Wl,--lto-CGO" + lto_opt_level ]
     }
   }
 }
@@ -893,6 +901,7 @@ config("thinlto_optimize_max") {
       ldflags += [ "-mllvm:-enable-pre=false", ]
     } else {
       ldflags = [ "-Wl,--lto-O" + lto_opt_level ]
+      ldflags += [ "-Wl,--lto-CGO" + lto_opt_level ]
     }
   }
 }
@@ -903,7 +912,7 @@ config("thinlto_optimize_max") {
 # tweak code generation for a particular CPU do not belong here!
 # See "compiler_codegen", below.
 config("compiler_cpu_abi") {
-  cflags = [ "-O3", ]
+  cflags = []
   ldflags = []
   defines = []
 
@@ -923,7 +932,7 @@ config("compiler_cpu_abi") {
         "-maes",
         "-mpclmul",
       ]
-      ldflags += [ "-m64", "-Wl,-O3", "-mavx", "-maes", "-mpclmul", "-Wl,-mllvm,-import-instr-limit=30", "-Wl,-mllvm,-import-hot-multiplier=15", "-Wl,-mllvm,-import-cold-multiplier=4", ]
+      ldflags += [ "-m64", "-Wl,-O3", "-mavx", "-maes", "-mpclmul", "-Wl,-mllvm,-import-instr-limit=30", "-Wl,-mllvm,-import-hot-multiplier=15", "-Wl,-mllvm,-import-cold-multiplier=2", ]
     } else if (current_cpu == "x86") {
       cflags += [ "-m32" ]
       ldflags += [ "-m32", "-Wl,-O3", "-msse3", ]
@@ -931,6 +940,7 @@ config("compiler_cpu_abi") {
         cflags += [
           "-mfpmath=sse",
           "-O3",
+          "-mmmx",
           "-msse3",
         ]
       }
@@ -1968,9 +1978,6 @@ config("no_incompatible_pointer_warnings") {
 # Shared settings for both "optimize" and "optimize_max" configs.
 # IMPORTANT: On Windows "/O1" and "/O2" must go before the common flags.
 
-  common_optimize_on_cflags = [ "-O3", ]
-  common_optimize_on_ldflags = [ "-Wl,-O3", ]
-
 if (is_win) {
 
   common_optimize_on_cflags = []
@@ -2013,7 +2020,6 @@ if (is_win) {
     "-mllvm", "-enable-interleaved-mem-accesses",
     "-mllvm", "-enable-masked-interleaved-mem-accesses",
     "-mllvm", "-enable-gvn-hoist",
-    "/O2",
     "/clang:-O3",
     "/clang:-mavx",
     "/clang:-maes",

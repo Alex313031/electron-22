@@ -728,10 +728,6 @@ def ConfigureAndBuild(target_arch, target_os, host_os, host_arch, parallel_jobs,
     configure_flags['Common'].extend([
         # --optflags doesn't append multiple entries, so set all at once.
         '--optflags="-O3"',
-        '--extra-cflags=-mavx',
-        '--extra-cflags=-maes',
-        '--extra-cflags=-mpclmul',
-        '--extra-cflags=-O3',
         '--enable-decoder=theora,vp8',
         '--enable-parser=vp3,vp8',
     ])
@@ -743,15 +739,7 @@ def ConfigureAndBuild(target_arch, target_os, host_os, host_arch, parallel_jobs,
             '--arch=x86_64',
         ])
       if target_os != 'android':
-        configure_flags['Common'].extend([
-          '--enable-lto',
-          '--extra-cflags=-O3',
-          '--extra-cflags=-mavx',
-          '--extra-cflags=-maes',
-          '--extra-cflags=-mpclmul',
-          '--arch=x86_64',
-          '--target-os=linux',
-        ])
+        configure_flags['Common'].extend(['--enable-lto'])
       pass
     elif target_arch == 'ia32':
       configure_flags['Common'].extend([
