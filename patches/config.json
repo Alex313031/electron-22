@@ -25,5 +25,13 @@
 
   "src/electron/patches/pdfium": "src/third_party/pdfium",
 
-  "src/electron/patches/skia": "src/third_party/skia"
+  "src/electron/patches/skia": "src/third_party/skia",
+
+  "src/electron/patches/dawn": "src/third_party/dawn",
+
+  "src/electron/patches/webrtc": "src/third_party/webrtc",
+
+  "src/electron/patches/libwebp": "src/third_party/libwebp/src",
+
+  "src/electron/patches/libvpx": "src/third_party/libvpx/source/libvpx"
 }

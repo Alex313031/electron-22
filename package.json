@@ -1,13 +1,13 @@
 {
   "name": "electron",
-  "version": "22.3.9",
+  "version": "22.3.27",
   "repository": "https://github.com/electron/electron",
   "description": "Build cross platform desktop apps with JavaScript, HTML, and CSS",
   "devDependencies": {
     "@azure/storage-blob": "^12.9.0",
     "@electron/docs-parser": "^1.0.0",
     "@electron/fiddle-core": "^1.0.4",
-    "@electron/github-app-auth": "^1.5.0",
+    "@electron/github-app-auth": "^2.0.0",
     "@electron/typescript-definitions": "^8.10.0",
     "@octokit/rest": "^19.0.7",
     "@primer/octicons": "^10.0.0",
